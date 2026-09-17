@@ -75,6 +75,54 @@ server.tool(
 );
 
 server.tool(
+  "tv_health_check",
+  "Vérifie que Chrome (debug port) est joignable et qu'un onglet TradingView est bien ouvert et chargé.",
+  {},
+  async () => {
+    try {
+      const target = await findTradingViewTarget();
+      if (!target) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify({
+                connected: false,
+                reason: `Aucun onglet Chrome trouvé sur le port ${DEBUG_PORT}. Lancez scripts\\launch_tv_debug.bat.`,
+              }),
+            },
+          ],
+        };
+      }
+      const isTradingView = target.url.includes("tradingview.com");
+      const info = await withPage(async (_client, { Runtime }) => {
+        const { result } = await Runtime.evaluate({
+          expression: "({ title: document.title, url: location.href, readyState: document.readyState })",
+          returnByValue: true,
+        });
+        return result.value;
+      });
+      return {
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify({
+              connected: true,
+              onTradingView: isTradingView,
+              ...info,
+            }),
+          },
+        ],
+      };
+    } catch (err) {
+      return {
+        content: [{ type: "text", text: JSON.stringify({ connected: false, reason: err.message }) }],
+      };
+    }
+  }
+);
+
+server.tool(
   "chart_screenshot",
   "Prend une capture d'écran de la page TradingView actuellement ouverte (via Chrome debug port).",
   {},
