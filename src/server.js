@@ -14,8 +14,22 @@ function loadRules() {
   return JSON.parse(raw);
 }
 
+async function findTradingViewTarget() {
+  const targets = await CDP.List({ port: DEBUG_PORT });
+  return (
+    targets.find((t) => t.type === "page" && t.url.includes("tradingview.com")) ||
+    targets.find((t) => t.type === "page")
+  );
+}
+
 async function withPage(fn) {
-  const client = await CDP({ port: DEBUG_PORT });
+  const target = await findTradingViewTarget();
+  if (!target) {
+    throw new Error(
+      "Aucun onglet Chrome trouvé sur le port " + DEBUG_PORT + ". Lancez scripts\\launch_tv_debug.bat d'abord."
+    );
+  }
+  const client = await CDP({ port: DEBUG_PORT, target: target.id });
   try {
     const { Page, Runtime } = client;
     await Page.enable();

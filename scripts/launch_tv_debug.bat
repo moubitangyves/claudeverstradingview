@@ -16,7 +16,7 @@ if not exist %CHROME_PATH% (
 )
 
 echo Lancement de Chrome avec debugging sur le port %DEBUG_PORT%...
-start "" %CHROME_PATH% --remote-debugging-port=%DEBUG_PORT% --user-data-dir="%USER_DATA_DIR%" %TV_URL%
+start "" %CHROME_PATH% --remote-debugging-port=%DEBUG_PORT% --user-data-dir="%USER_DATA_DIR%" --no-first-run --no-default-browser-check %TV_URL%
 
 echo Chrome DevTools Protocol disponible sur http://localhost:%DEBUG_PORT%
 endlocal
