@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "claudeverstradingview": {
+      "command": "node",
+      "args": ["C:\\Users\\DELL\\claudeverstradingview\\src\\server.js"]
+    }
+  }
+}
