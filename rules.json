@@ -1,0 +1,28 @@
+{
+  "symbol": "BTCUSDT",
+  "timeframe": "1h",
+  "strategy": "trend-following",
+  "riskManagement": {
+    "maxRiskPerTradePercent": 1,
+    "stopLossPercent": 2,
+    "takeProfitPercent": 4,
+    "maxOpenPositions": 3
+  },
+  "entryConditions": {
+    "indicator": "EMA",
+    "fastPeriod": 9,
+    "slowPeriod": 21,
+    "rule": "fastPeriod crosses above slowPeriod"
+  },
+  "exitConditions": {
+    "indicator": "RSI",
+    "period": 14,
+    "overbought": 70,
+    "oversold": 30
+  },
+  "webhook": {
+    "enabled": true,
+    "port": 3000,
+    "secret": "CHANGE_ME"
+  }
+}
